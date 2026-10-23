@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NEURIVAHUB</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
+<script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<style>
+:root{--p:#FF2DA6;--c:#D4FF3F;--k:#0B0B0B;--g:#1A1A1A;--w:#FFFFFF;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--k);color:var(--w);font-family:'Space Grotesk',system-ui,sans-serif;margin:0;overflow-x:hidden}
+.big{font-family:'Archivo Black',Impact,sans-serif;line-height:.82;letter-spacing:-.03em;text-transform:uppercase}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.13;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.card{background:var(--g);border-radius:28px;transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-6px) rotate(-.6deg);box-shadow:0 0 0 2px var(--p)}
+.btn{display:inline-block;font-weight:700;border-radius:999px;padding:.75rem 1.5rem;cursor:pointer;border:2px solid var(--p);background:var(--p);color:#fff;transition:transform .2s,background .2s,color .2s}
+.btn:hover{transform:scale(1.06) rotate(-1.5deg);background:var(--c);border-color:var(--c);color:var(--k)}
+.btn.o{background:transparent;color:var(--w)}
+.btn.s{padding:.45rem 1rem;font-size:.85rem}
+.chip{border-radius:999px;padding:.3rem .9rem;font-size:.8rem;font-weight:700;background:var(--c);color:var(--k)}
+.fl{animation:fl 6s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-28px) rotate(12deg)}}
+.mq{display:flex;width:max-content;animation:mq 22s linear infinite}@keyframes mq{to{transform:translateX(-50%)}}
+input,select,textarea{background:#0B0B0B;border:2px solid #2a2a2a;border-radius:16px;padding:.7rem 1rem;width:100%;color:#fff;font:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--c)}
+td,th{padding:.6rem .8rem;text-align:left;border-bottom:1px solid #2a2a2a;white-space:nowrap}
+.ib{display:inline-grid;place-items:center;background:#0B0B0B;border:2px solid var(--p);border-radius:14px;padding:10px}.pk{color:var(--p)}.ch{color:var(--c)}
+</style></head>
+<body><script>onerror=function(m){document.body.insertAdjacentHTML('afterbegin','<pre style="color:#D4FF3F;padding:16px;position:relative;z-index:99;white-space:pre-wrap">Error: '+m+'</pre>')}</script><div class="grain"></div><div id="root"></div>
+<script>
+const {useState,useEffect}=React, html=htm.bind(React.createElement);
+const ICONS={"Code2":[["path",{"d":"m18 16 4-4-4-4"}],["path",{"d":"m6 8-4 4 4 4"}],["path",{"d":"m14.5 4-5 16"}]],"Brain":[["path",{"d":"M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"}],["path",{"d":"M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"}],["path",{"d":"M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"}],["path",{"d":"M17.599 6.5a3 3 0 0 0 .399-1.375"}],["path",{"d":"M6.003 5.125A3 3 0 0 0 6.401 6.5"}],["path",{"d":"M3.477 10.896a4 4 0 0 1 .585-.396"}],["path",{"d":"M19.938 10.5a4 4 0 0 1 .585.396"}],["path",{"d":"M6 18a4 4 0 0 1-1.967-.516"}],["path",{"d":"M19.967 17.484A4 4 0 0 1 18 18"}]],"PenTool":[["path",{"d":"M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z"}],["path",{"d":"m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18"}],["path",{"d":"m2.3 2.3 7.286 7.286"}],["circle",{"cx":"11","cy":"11","r":"2"}]],"Cpu":[["rect",{"width":"16","height":"16","x":"4","y":"4","rx":"2"}],["rect",{"width":"6","height":"6","x":"9","y":"9","rx":"1"}],["path",{"d":"M15 2v2"}],["path",{"d":"M15 20v2"}],["path",{"d":"M2 15h2"}],["path",{"d":"M2 9h2"}],["path",{"d":"M20 15h2"}],["path",{"d":"M20 9h2"}],["path",{"d":"M9 2v2"}],["path",{"d":"M9 20v2"}]],"Globe":[["circle",{"cx":"12","cy":"12","r":"10"}],["path",{"d":"M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"}],["path",{"d":"M2 12h20"}]],"Rocket":[["path",{"d":"M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"}],["path",{"d":"m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"}],["path",{"d":"M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"}],["path",{"d":"M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"}]],"Bot":[["path",{"d":"M12 8V4H8"}],["rect",{"width":"16","height":"12","x":"4","y":"8","rx":"2"}],["path",{"d":"M2 14h2"}],["path",{"d":"M20 14h2"}],["path",{"d":"M15 13v2"}],["path",{"d":"M9 13v2"}]],"Palette":[["circle",{"cx":"13.5","cy":"6.5","r":".5","fill":"currentColor"}],["circle",{"cx":"17.5","cy":"10.5","r":".5","fill":"currentColor"}],["circle",{"cx":"8.5","cy":"7.5","r":".5","fill":"currentColor"}],["circle",{"cx":"6.5","cy":"12.5","r":".5","fill":"currentColor"}],["path",{"d":"M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"}]],"Sun":[["circle",{"cx":"12","cy":"12","r":"4"}],["path",{"d":"M12 2v2"}],["path",{"d":"M12 20v2"}],["path",{"d":"m4.93 4.93 1.41 1.41"}],["path",{"d":"m17.66 17.66 1.41 1.41"}],["path",{"d":"M2 12h2"}],["path",{"d":"M20 12h2"}],["path",{"d":"m6.34 17.66-1.41 1.41"}],["path",{"d":"m19.07 4.93-1.41 1.41"}]],"MessageCircle":[["path",{"d":"M7.9 20A9 9 0 1 0 4 16.1L2 22Z"}]],"Utensils":[["path",{"d":"M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"}],["path",{"d":"M7 2v20"}],["path",{"d":"M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"}]],"BookOpen":[["path",{"d":"M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"}],["path",{"d":"M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"}]],"Zap":[["path",{"d":"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"}]],"Users":[["path",{"d":"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"}],["circle",{"cx":"9","cy":"7","r":"4"}],["path",{"d":"M22 21v-2a4 4 0 0 0-3-3.87"}],["path",{"d":"M16 3.13a4 4 0 0 1 0 7.75"}]],"Calendar":[["path",{"d":"M8 2v4"}],["path",{"d":"M16 2v4"}],["rect",{"width":"18","height":"18","x":"3","y":"4","rx":"2"}],["path",{"d":"M3 10h18"}]],"X":[["path",{"d":"M18 6 6 18"}],["path",{"d":"m6 6 12 12"}]],"Menu":[["line",{"x1":"4","x2":"20","y1":"12","y2":"12"}],["line",{"x1":"4","x2":"20","y1":"6","y2":"6"}],["line",{"x1":"4","x2":"20","y1":"18","y2":"18"}]],"Sparkles":[["path",{"d":"M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"}],["path",{"d":"M20 3v4"}],["path",{"d":"M22 5h-4"}],["path",{"d":"M4 17v2"}],["path",{"d":"M5 18H3"}]],"Check":[["path",{"d":"M20 6 9 17l-5-5"}]]};
+const L={};Object.keys(ICONS).forEach(k=>{L[k]=({size=24,color='currentColor',style})=>React.createElement('svg',{width:size,height:size,viewBox:'0 0 24 24',fill:'none',stroke:color,strokeWidth:2,strokeLinecap:'round',strokeLinejoin:'round',style},ICONS[k].map((n,i)=>React.createElement(n[0],{...n[1],key:i})))});
+const Ic=({n,s=24,c='var(--p)'})=>{const C=L[n]||L.Zap||(()=>null);return html`<span class="ib" style=${{color:c}}><${C} size=${s} color="currentColor"/></span>`};
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const COURSES=[[1,'Coding','TSh 40,000','Beginner','Code2'],[2,'AI','TSh 60,000','Intermediate','Brain'],[3,'Design','TSh 35,000','Beginner','PenTool'],[4,'Arduino','TSh 45,000','Beginner','Cpu'],[5,'Web Dev','TSh 50,000','Intermediate','Globe'],[6,'Startup','TSh 30,000','All levels','Rocket']].map(a=>({id:a[0],t:a[1],p:a[2],l:a[3],e:a[4]}));
+const PROJ=[['Soko Bot','AI','Bot'],['Smart Duka','Hardware','Cpu'],['Mbeya Eats','Web','Utensils'],['Kanga UI Kit','Design','Palette'],['Solar Tracker','Hardware','Sun'],['Swahili Chat','AI','MessageCircle']];
+const EVENTS=[['Hack Night Mbeya','Nov 8','Mbeya Tech Hub'],['Arduino Bootcamp','Nov 22','Dar es Salaam'],['Demo Day 2026','Dec 5','Iringa'],['Design Jam','Dec 14','Online']];
+const PLANS=[['Free','0','Community access|Intro workshops|Public projects'],['Pro','25,000','All courses|Mentor sessions|Event priority|Certificate'],['Premium','60,000','Everything in Pro|1-on-1 coaching|Startup pitch slot|Hub workspace']];
+const NAV=['about','courses','projects','events','pricing','contact'];
+const route=()=>(location.hash.replace('#/','')||'home');
+const LINKS=['Next.js','Vite','Tailwind','React'];
+
+function App(){
+ const [r,setR]=useState(route());
+ const [open,setOpen]=useState(false),[modal,setModal]=useState(null),[toast,setToast]=useState('');
+ const [users,setUsers]=useState(LS.get('nv_users',[{id:1,name:'Admin',email:'admin@neuriva.tz',pw:'admin123',role:'admin',plan:'Premium'}]));
+ const [courses,setCourses]=useState(LS.get('nv_courses2',COURSES));
+ const [msgs,setMsgs]=useState(LS.get('nv_msgs',[]));
+ const [regs,setRegs]=useState(LS.get('nv_regs',[]));
+ const [me,setMe]=useState(LS.get('nv_me',null));
+ const [theme,setTheme]=useState(LS.get('nv_theme',{logo:'NEURIVAHUB',p:'#FF2DA6',c:'#D4FF3F'}));
+ useEffect(()=>{const f=()=>{setR(route());setOpen(false);scrollTo(0,0)};addEventListener('hashchange',f);return()=>removeEventListener('hashchange',f)},[]);
+ useEffect(()=>{document.documentElement.style.setProperty('--p',theme.p);document.documentElement.style.setProperty('--c',theme.c);LS.set('nv_theme',theme)},[theme]);
+ useEffect(()=>LS.set('nv_users',users),[users]);useEffect(()=>LS.set('nv_courses2',courses),[courses]);
+ useEffect(()=>LS.set('nv_msgs',msgs),[msgs]);useEffect(()=>LS.set('nv_regs',regs),[regs]);useEffect(()=>LS.set('nv_me',me),[me]);
+ const say=m=>{setToast(m);setTimeout(()=>setToast(''),2400)};
+ const need=fn=>(...a)=>me?fn(...a):(setModal('login'),say('Please log in first'));
+ const reg=need(k=>{if(regs.includes(k+me.id)){say('Already registered');return}setRegs([...regs,k+me.id]);say('Registered')});
+ const A={me,say,users,setUsers,courses,setCourses,msgs,setMsgs,theme,setTheme,reg,regs,need,setModal};
+ return html`<div>
+  <${Nav} r=${r} open=${open} setOpen=${setOpen} A=${A} setMe=${setMe}/>
+  ${r==='admin'?html`<${Admin} A=${A}/>`:html`<main>
+   ${r==='home'&&html`<${Home}/>`}
+   ${(r==='home'||r==='about')&&html`<${About}/>`}
+   ${(r==='home'||r==='courses')&&html`<${Courses} A=${A}/>`}
+   ${(r==='home'||r==='projects')&&html`<${Projects}/>`}
+   ${(r==='home'||r==='events')&&html`<${Events} A=${A}/>`}
+   ${(r==='home'||r==='pricing')&&html`<${Pricing} A=${A} setMe=${setMe}/>`}
+   ${(r==='home'||r==='contact')&&html`<${Contact} A=${A}/>`}
+  </main>`}
+  <${Footer} A=${A}/>
+  ${modal&&html`<${Auth} mode=${modal} setMode=${setModal} A=${A} setMe=${setMe}/>`}
+  ${toast&&html`<div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[70] chip text-base px-6 py-3">${toast}</div>`}
+ </div>`}
+
+function Nav({r,open,setOpen,A,setMe}){
+ const NL=({to,children})=>html`<a href=${'#/'+to} class=${'font-bold uppercase text-sm hover:text-[var(--c)] '+(r===to?'ch':'')}>${children}</a>`;
+ return html`<header class="sticky top-0 z-50 bg-[#0B0B0B]/90 backdrop-blur border-b border-[#222]" style=${{top:0}}>
+  <div class="max-w-6xl mx-auto px-5 py-3 flex items-center justify-between">
+   <a href="#/" class="big text-2xl pk">${A.theme.logo}</a>
+   <nav class="hidden md:flex gap-6 items-center">${NAV.map(n=>html`<${NL} to=${n}>${n}<//>`)}
+    ${A.me?html`<${React.Fragment}>${A.me.role==='admin'&&html`<${NL} to="admin">Admin<//>`}<button class="btn s o" onClick=${()=>{setMe(null);A.say('Logged out')}}>Logout</button><//>`:html`<button class="btn s" onClick=${()=>A.setModal('login')}>Login</button>`}</nav>
+   <button class="md:hidden text-3xl" aria-label="menu" onClick=${()=>setOpen(!open)}>${open?html`<${L.X} size=${32}/>`:html`<${L.Menu} size=${32}/>`}</button>
+  </div>
+  ${open&&html`<div class="md:hidden px-5 pb-5 flex flex-col gap-4">${NAV.map(n=>html`<${NL} to=${n}>${n}<//>`)}
+   ${A.me?html`<${React.Fragment}>${A.me.role==='admin'&&html`<${NL} to="admin">Admin<//>`}<button class="btn s o" onClick=${()=>setMe(null)}>Logout</button><//>`:html`<button class="btn s" onClick=${()=>A.setModal('login')}>Login</button>`}</div>`}
+ </header>`}
+
+function Home(){
+ const t=['BUILD','LEARN','LAUNCH','CREATE','TANZANIA','GEN Z'];
+ return html`<section class="relative overflow-hidden px-5 pt-14 pb-10">
+  <div class="fl absolute -top-10 -right-16 w-64 h-64 rounded-full bg-[var(--p)] opacity-40 blur-2xl"></div>
+  <div class="fl absolute top-72 -left-16 w-52 h-52 bg-[var(--c)] opacity-30 blur-2xl" style=${{borderRadius:'60% 40% 55% 45%',animationDelay:'-2s'}}></div>
+  <div class="fl absolute bottom-10 right-10 w-16 h-16 border-4 border-[var(--c)] rotate-12" style=${{animationDelay:'-4s'}}></div>
+  <div class="relative max-w-6xl mx-auto">
+   <span class="chip">TECH HUB · YOUNG CREATORS · TANZANIA</span>
+   <h1 class="big mt-6" style=${{fontSize:'clamp(3.6rem,19vw,14rem)'}}>
+    <span class="pk block">NEURIVA</span>
+    <span class="ch block -mt-[.12em] ml-[18%] -rotate-3 mix-blend-normal">HUB</span></h1>
+   <p class="big mt-8 text-3xl sm:text-5xl"><span class="pk">BUILD.</span> <span class="ch">LEARN.</span> <span class="pk">LAUNCH.</span></p>
+   <p class="mt-6 max-w-xl text-lg text-neutral-300">Courses, projects and events for the next wave of Tanzanian makers, coders and designers.</p>
+   <div class="mt-8 flex gap-3 flex-wrap"><a class="btn" href="#/pricing">Join NeurivaHub</a><a class="btn o" href="#/courses">See courses</a></div>
+  </div>
+  <div class="mt-14 -mx-5 py-4 bg-[var(--c)] text-[#0B0B0B] -rotate-1 overflow-hidden"><div class="mq big text-4xl">${[0,1].map(()=>t.map(x=>html`<span class="px-6 inline-flex items-center gap-4">${x}<${L.Sparkles} size=${30} color="#0B0B0B"/></span>`))}</div></div>
+ </section>`}
+
+function About(){return html`<section class="px-5 py-16 max-w-6xl mx-auto">
+  <h2 class="big text-5xl sm:text-7xl pk">What is <span class="ch">NeurivaHub?</span></h2>
+  <p class="mt-6 max-w-2xl text-lg text-neutral-300">NeurivaHub is a tech hub built for young creators in Tanzania. We teach practical skills, back real projects, and host events where ideas turn into products.</p>
+  <div class="grid sm:grid-cols-3 gap-5 mt-10">${[['Zap','Learn fast','Hands-on courses taught by makers.'],['Users','Build together','Squads, mentors and a shared workspace.'],['Rocket','Launch for real','Demo days and startup support.']].map(x=>html`<div class="card p-7"><${Ic} n=${x[0]} s=${32}/><h3 class="big text-2xl mt-4 ch">${x[1]}</h3><p class="mt-3 text-neutral-300">${x[2]}</p></div>`)}</div></section>`}
+
+function Courses({A}){
+ const enroll=A.need(c=>A.say('Enrolled in '+c.t));
+ return html`<section class="px-5 py-16 max-w-6xl mx-auto"><h2 class="big text-5xl sm:text-7xl ch">Courses</h2>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-10">${A.courses.map(c=>html`<div class="card overflow-hidden" key=${c.id}>
+   <div class="h-28 grid place-items-center" style=${{background:'linear-gradient(135deg,var(--p),#7a0f50)'}}><${Ic} n=${c.e}/></div>
+   <div class="p-6"><div class="flex justify-between items-center"><h3 class="big text-3xl">${c.t}</h3><span class="chip">${c.l}</span></div>
+   <p class="mt-4 text-2xl font-bold pk">${c.p}</p><button class="btn s mt-4" onClick=${()=>enroll(c)}>Enroll</button></div></div>`)}</div></section>`}
+
+function Projects(){
+ const [f,setF]=useState('All');const cats=['All','AI','Hardware','Web','Design'];
+ return html`<section class="px-5 py-16 max-w-6xl mx-auto"><h2 class="big text-5xl sm:text-7xl pk">Projects</h2>
+  <div class="flex gap-2 flex-wrap mt-8">${cats.map(c=>html`<button class=${'btn s '+(f===c?'':'o')} onClick=${()=>setF(c)}>${c}</button>`)}</div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">${PROJ.filter(p=>f==='All'||p[1]===f).map(p=>html`<div class="card p-7" key=${p[0]}><${Ic} n=${p[2]}/><h3 class="big text-2xl mt-4">${p[0]}</h3><span class="chip mt-3 inline-block">${p[1]}</span></div>`)}</div></section>`}
+
+function Events({A}){return html`<section class="px-5 py-16 max-w-6xl mx-auto"><h2 class="big text-5xl sm:text-7xl ch">Events</h2>
+  <div class="grid gap-4 mt-10">${EVENTS.map((e,i)=>html`<div class="card p-6 flex flex-wrap items-center justify-between gap-4" key=${i}>
+   <div><div class="flex items-center gap-3"><${Ic} n="Calendar"/><span class="big text-3xl pk">${e[1]}</span></div><div class="text-xl font-bold mt-2">${e[0]}</div><div class="text-neutral-400">${e[2]}</div></div>
+   <button class=${'btn '+(A.me&&A.regs.includes('e'+i+A.me.id)?'o':'')} onClick=${()=>A.reg('e'+i)}>${A.me&&A.regs.includes('e'+i+A.me.id)?'Registered':'Register'}</button></div>`)}</div></section>`}
+
+function Pricing({A,setMe}){
+ const pick=A.need(p=>{const u={...A.me,plan:p};A.setUsers(A.users.map(x=>x.id===u.id?u:x));setMe(u);A.say(p+' plan selected')});
+ return html`<section class="px-5 py-16 max-w-6xl mx-auto"><h2 class="big text-5xl sm:text-7xl pk">Pricing</h2>
+  <div class="grid md:grid-cols-3 gap-5 mt-10 items-stretch">${PLANS.map(p=>{const hot=p[0]==='Pro';return html`<div key=${p[0]} class="card p-8 flex flex-col" style=${hot?{background:'var(--p)',color:'#fff'}:{}}>
+   <div class="flex items-center gap-3"><${Ic} n="Zap" c="var(--c)"/><h3 class="big text-3xl">${p[0]}</h3></div><div class="big text-5xl mt-4">${p[1]}<span class="text-base"> TSh/mo</span></div>
+   <ul class="mt-6 space-y-2 flex-1">${p[2].split('|').map(x=>html`<li class="flex items-center gap-2"><${L.Check} size=${20} style=${{color:hot?'#0B0B0B':'var(--c)'}}/>${x}</li>`)}</ul>
+   <button class=${'btn mt-6 '+(hot?'':'o')} style=${hot?{background:'#0B0B0B',borderColor:'#0B0B0B'}:{}} onClick=${()=>pick(p[0])}>${A.me&&A.me.plan===p[0]?'Current plan':'Choose '+p[0]}</button></div>`})}</div></section>`}
+
+function Contact({A}){
+ const [f,setF]=useState({name:'',email:'',message:''});
+ const go=e=>{e.preventDefault();if(!f.name||!f.email||!f.message)return A.say('Fill all fields');A.setMsgs([...A.msgs,{...f,id:Date.now()}]);setF({name:'',email:'',message:''});A.say('Message sent')};
+ return html`<section class="px-5 py-16 max-w-3xl mx-auto"><h2 class="big text-5xl sm:text-7xl ch">Contact</h2>
+  <div class="card p-6 mt-10 space-y-4"><input placeholder="Your name" value=${f.name} onInput=${e=>setF({...f,name:e.target.value})}/>
+  <input placeholder="Email" type="email" value=${f.email} onInput=${e=>setF({...f,email:e.target.value})}/>
+  <textarea rows="4" placeholder="Message" value=${f.message} onInput=${e=>setF({...f,message:e.target.value})}></textarea>
+  <button class="btn" onClick=${go}>Send message</button></div></section>`}
+
+function Footer({A}){return html`<footer class="px-5 py-12 border-t border-[#222] text-center"><div class="big text-4xl pk">${A.theme.logo}</div><p class="text-neutral-400 mt-3">Build. Learn. Launch. · Tanzania · © 2026</p></footer>`}
+
+function Auth({mode,setMode,A,setMe}){
+ const [f,setF]=useState({name:'',email:'',pw:''});const su=mode==='signup';
+ const go=()=>{
+  if(su){if(!f.name||!f.email||f.pw.length<6)return A.say('Name, email, 6+ char password');
+   if(A.users.some(u=>u.email===f.email))return A.say('Email already used');
+   const u={id:Date.now(),name:f.name,email:f.email,pw:f.pw,role:'user',plan:'Free'};A.setUsers([...A.users,u]);setMe({...u,token:btoa(u.id+':'+Date.now())});}
+  else{const u=A.users.find(x=>x.email===f.email&&x.pw===f.pw);if(!u)return A.say('Wrong email or password');setMe({...u,token:btoa(u.id+':'+Date.now())});}
+  setMode(null);A.say('Welcome')};
+ return html`<div class="fixed inset-0 z-[65] bg-black/80 grid place-items-center p-5" onClick=${()=>setMode(null)}>
+  <div class="card p-7 w-full max-w-sm space-y-3" onClick=${e=>e.stopPropagation()} style=${{transform:'none'}}>
+   <h3 class="big text-4xl pk">${su?'Sign up':'Log in'}</h3>
+   ${su&&html`<input placeholder="Name" value=${f.name} onInput=${e=>setF({...f,name:e.target.value})}/>`}
+   <input placeholder="Email" value=${f.email} onInput=${e=>setF({...f,email:e.target.value})}/>
+   <input type="password" placeholder="Password" value=${f.pw} onInput=${e=>setF({...f,pw:e.target.value})}/>
+   <button class="btn w-full" onClick=${go}>${su?'Create account':'Login'}</button>
+   <button class="text-sm ch underline" onClick=${()=>setMode(su?'login':'signup')}>${su?'Have an account? Log in':'New here? Sign up'}</button>
+   ${!su&&html`<button class="text-xs text-neutral-400 block" onClick=${()=>setF({name:'',email:'admin@neuriva.tz',pw:'admin123'})}>Demo admin: fill credentials</button>`}</div></div>`}
+
+function Admin({A}){
+ const [tab,setTab]=useState('Overview');const [keys,setKeys]=useState(LS.get('nv_keys',[]));
+ const blank={t:'',p:'',l:'Beginner',e:'BookOpen'};const [form,setForm]=useState(blank);const [edit,setEdit]=useState(null);
+ if(!A.me||A.me.role!=='admin')return html`<section class="px-5 py-24 text-center"><h2 class="big text-5xl pk">Admins only</h2><p class="mt-4 text-neutral-400">Log in with admin@neuriva.tz / admin123</p><button class="btn mt-6" onClick=${()=>A.setModal('login')}>Login</button></section>`;
+ const rev=A.users.reduce((s,u)=>s+(u.plan==='Pro'?25000:u.plan==='Premium'?60000:0),0);
+ const stats=[['Users',A.users.length],['Courses',A.courses.length],['Projects',PROJ.length],['Revenue','TSh '+rev.toLocaleString()]];
+ const bars=[4,7,5,9,12,A.users.length+6];const mx=Math.max(...bars);
+ const save=()=>{if(!form.t||!form.p)return A.say('Title and price needed');
+  if(edit){A.setCourses(A.courses.map(c=>c.id===edit?{...form,id:edit}:c));setEdit(null)}else A.setCourses([...A.courses,{...form,id:Date.now()}]);setForm(blank);A.say('Saved')};
+ const gen=()=>{const k='nv_live_'+Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b=>b.toString(16).padStart(2,'0')).join('');const n=[...keys,k];setKeys(n);LS.set('nv_keys',n)};
+ const T=['Overview','Users','Courses','API Keys','Settings'];
+ return html`<div class="md:flex min-h-screen">
+  <aside class="md:w-56 bg-[#0B0B0B] border-r border-[#222] p-4 flex md:flex-col gap-2 overflow-x-auto"><div class="big text-xl pk hidden md:block mb-4">ADMIN</div>
+   ${T.map(t=>html`<button class=${'btn s whitespace-nowrap '+(tab===t?'':'o')} onClick=${()=>setTab(t)}>${t}</button>`)}</aside>
+  <section class="flex-1 p-5 min-w-0">
+   <h2 class="big text-4xl ch mb-6">${tab}</h2>
+   ${tab==='Overview'&&html`<div><div class="grid grid-cols-2 lg:grid-cols-4 gap-4">${stats.map(s=>html`<div class="card p-5"><div class="text-neutral-400 text-sm">${s[0]}</div><div class="big text-2xl sm:text-3xl pk mt-2">${s[1]}</div></div>`)}</div>
+    <div class="card p-5 mt-5"><div class="font-bold mb-3">Signups (last 6 months)</div><svg viewBox="0 0 300 120" class="w-full">${bars.map((b,i)=>html`<rect x=${i*50+8} y=${110-b/mx*100} width="34" height=${b/mx*100} rx="8" fill=${i%2?'var(--c)':'var(--p)'}/>`)}</svg></div>
+    <div class="card p-5 mt-5"><div class="font-bold mb-2">Contact messages (${A.msgs.length})</div>${A.msgs.length?A.msgs.map(m=>html`<p class="text-sm border-b border-[#2a2a2a] py-2"><b class="ch">${m.name}</b> · ${m.email}<br/>${m.message}</p>`):html`<p class="text-neutral-400 text-sm">No messages yet.</p>`}</div></div>`}
+   ${tab==='Users'&&html`<div class="card p-3 overflow-x-auto"><table class="w-full text-sm"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Plan</th><th></th></tr></thead><tbody>${A.users.map(u=>html`<tr key=${u.id}><td>${u.name}</td><td>${u.email}</td><td>${u.role}</td><td>${u.plan}</td><td>${u.role!=='admin'&&html`<button class="btn s o" onClick=${()=>{A.setUsers(A.users.filter(x=>x.id!==u.id));A.say('User deleted')}}>Delete</button>`}</td></tr>`)}</tbody></table></div>`}
+   ${tab==='Courses'&&html`<div><div class="card p-5 grid sm:grid-cols-4 gap-3"><input placeholder="Title" value=${form.t} onInput=${e=>setForm({...form,t:e.target.value})}/><input placeholder="Price e.g. TSh 40,000" value=${form.p} onInput=${e=>setForm({...form,p:e.target.value})}/>
+    <select value=${form.l} onChange=${e=>setForm({...form,l:e.target.value})}><option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>All levels</option></select><button class="btn s" onClick=${save}>${edit?'Update':'Add course'}</button></div>
+    <div class="grid gap-3 mt-5">${A.courses.map(c=>html`<div class="card p-4 flex items-center justify-between gap-3 flex-wrap" key=${c.id}><span class="flex items-center gap-3"><${Ic} n=${c.e}/><b>${c.t}</b> · ${c.p} · ${c.l}</span><span class="flex gap-2"><button class="btn s o" onClick=${()=>{setForm(c);setEdit(c.id)}}>Edit</button><button class="btn s" onClick=${()=>{A.setCourses(A.courses.filter(x=>x.id!==c.id));A.say('Deleted')}}>Delete</button></span></div>`)}</div></div>`}
+   ${tab==='API Keys'&&html`<div><button class="btn" onClick=${gen}>Generate API key</button><div class="grid gap-3 mt-5">${keys.map(k=>html`<div class="card p-4 flex gap-3 items-center justify-between flex-wrap"><code class="ch break-all text-sm">${k}</code><span class="flex gap-2"><button class="btn s o" onClick=${()=>{try{navigator.clipboard.writeText(k)}catch(e){}A.say('Copied')}}>Copy</button><button class="btn s" onClick=${()=>{const n=keys.filter(x=>x!==k);setKeys(n);LS.set('nv_keys',n)}}>Revoke</button></span></div>`)}</div></div>`}
+   ${tab==='Settings'&&html`<div class="card p-6 space-y-4 max-w-md"><label class="block">Logo text<input value=${A.theme.logo} onInput=${e=>A.setTheme({...A.theme,logo:e.target.value})}/></label>
+    <label class="block">Primary (pink)<input type="color" value=${A.theme.p} onInput=${e=>A.setTheme({...A.theme,p:e.target.value})}/></label>
+    <label class="block">Secondary (chartreuse)<input type="color" value=${A.theme.c} onInput=${e=>A.setTheme({...A.theme,c:e.target.value})}/></label>
+    <button class="btn s" onClick=${()=>A.setTheme({logo:'NEURIVAHUB',p:'#FF2DA6',c:'#D4FF3F'})}>Reset to brand colors</button></div>`}
+  </section></div>`}
+ReactDOM.createRoot(document.getElementById('root')).render(html`<${App}/>`);
+</script></body></html>
